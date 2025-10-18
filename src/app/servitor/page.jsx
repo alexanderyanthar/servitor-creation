@@ -130,7 +130,7 @@ export default function CreateServitor() {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -144,7 +144,7 @@ export default function CreateServitor() {
               onChange={(e) =>
                 setFormData({ ...formData, call: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -159,7 +159,7 @@ export default function CreateServitor() {
                 setFormData({ ...formData, purpose: e.target.value })
               }
               rows="3"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -173,7 +173,7 @@ export default function CreateServitor() {
                 setFormData({ ...formData, powers: e.target.value })
               }
               rows="3"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -187,7 +187,7 @@ export default function CreateServitor() {
               onChange={(e) =>
                 setFormData({ ...formData, timing: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             >
               <option value="constant">Constant</option>
               <option value="single-use">Single Use</option>
@@ -204,7 +204,7 @@ export default function CreateServitor() {
               onChange={(e) =>
                 setFormData({ ...formData, zodiac_sign: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             >
               <option value="">Select a zodiac sign (optional)</option>
               {ZODIAC_SIGNS.map((sign) => (
@@ -225,7 +225,7 @@ export default function CreateServitor() {
                 setFormData({ ...formData, appearance: e.target.value })
               }
               rows="3"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -239,7 +239,7 @@ export default function CreateServitor() {
               onChange={(e) =>
                 setFormData({ ...formData, sustenance: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -253,7 +253,7 @@ export default function CreateServitor() {
               onChange={(e) =>
                 setFormData({ ...formData, location: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
@@ -268,7 +268,7 @@ export default function CreateServitor() {
                 setFormData({ ...formData, fatal_flaw: e.target.value })
               }
               rows="2"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
 
