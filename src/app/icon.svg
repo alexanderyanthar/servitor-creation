@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Simple Dual Moons - Version 1: Minimal black/white -->
+  <rect width="200" height="200" fill="#000000"/>
+  
+  <!-- Left crescent -->
+  <path d="M 70,60 A 30,30 0 0,1 70,140 A 25,25 0 0,0 70,60 Z" 
+        fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Right crescent -->
+  <path d="M 130,60 A 30,30 0 0,0 130,140 A 25,25 0 0,1 130,60 Z" 
+        fill="none" stroke="#ffffff" stroke-width="3"/>
+</svg>
