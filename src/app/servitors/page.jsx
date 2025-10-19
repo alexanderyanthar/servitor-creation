@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
+import SigilGenerator from "@/components/SigilGenerator";
 
 const ZODIAC_SIGNS = [
   "Aries",
@@ -26,6 +27,7 @@ export default function MyServitors() {
   const [selectedServitor, setSelectedServitor] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [generatedSigil, setGeneratedSigil] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -54,6 +56,28 @@ export default function MyServitors() {
     setIsEditing(true);
   };
 
+  const handleSigilGenerated = (sigil) => {
+    setGeneratedSigil(sigil);
+  };
+
+  const handleGenerateSigil = async () => {
+    if (!selectedServitor || !generatedSigil) return;
+
+    const { error } = await supabase
+      .from("servitors")
+      .update({ sigil_image: generatedSigil })
+      .eq("id", selectedServitor.id);
+
+    if (error) {
+      console.error("Error saving sigil:", error);
+      alert("Error saving sigil");
+    } else {
+      alert("Sigil saved successfully!");
+      fetchServitors();
+      setSelectedServitor({ ...selectedServitor, sigil_image: generatedSigil });
+    }
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -80,6 +104,7 @@ export default function MyServitors() {
       alert("Servitor updated successfully!");
       setIsEditing(false);
       setSelectedServitor(null);
+      setGeneratedSigil(null);
       fetchServitors();
     }
   };
@@ -101,8 +126,16 @@ export default function MyServitors() {
     } else {
       alert("Servitor deleted successfully");
       setSelectedServitor(null);
+      setGeneratedSigil(null);
       fetchServitors();
     }
+  };
+
+  const downloadSigil = (sigil, name) => {
+    const link = document.createElement("a");
+    link.download = `${name}-sigil.png`;
+    link.href = sigil;
+    link.click();
   };
 
   if (loading) {
@@ -149,6 +182,9 @@ export default function MyServitors() {
                     ♈ {servitor.zodiac_sign}
                   </p>
                 )}
+                {servitor.sigil_image && (
+                  <p className="text-sm text-green-600 mb-3">✓ Sigil created</p>
+                )}
                 <p className="text-gray-700 line-clamp-3">{servitor.purpose}</p>
                 <p className="text-sm text-purple-600 mt-3 font-medium">
                   {servitor.timing}
@@ -160,111 +196,190 @@ export default function MyServitors() {
 
         {/* View/Edit Modal */}
         {selectedServitor && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+            <div className="bg-white rounded-lg max-w-5xl w-full max-h-[95vh] overflow-y-auto p-8 my-8">
               {!isEditing ? (
                 // View Mode
-                <>
-                  <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-3xl font-bold text-gray-900">
-                      {selectedServitor.name}
-                    </h2>
-                    <button
-                      onClick={() => setSelectedServitor(null)}
-                      className="text-gray-500 hover:text-gray-700 text-2xl"
-                    >
-                      ×
-                    </button>
-                  </div>
-
-                  <div className="space-y-4">
-                    {selectedServitor.call && (
-                      <div>
-                        <strong className="text-gray-700">Call:</strong>
-                        <p className="text-gray-600">{selectedServitor.call}</p>
-                      </div>
-                    )}
-
-                    <div>
-                      <strong className="text-gray-700">Purpose:</strong>
-                      <p className="text-gray-600">
-                        {selectedServitor.purpose}
-                      </p>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Left Column - Details */}
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <h2 className="text-3xl font-bold text-gray-900">
+                        {selectedServitor.name}
+                      </h2>
+                      <button
+                        onClick={() => {
+                          setSelectedServitor(null);
+                          setGeneratedSigil(null);
+                        }}
+                        className="text-gray-500 hover:text-gray-700 text-2xl"
+                      >
+                        ×
+                      </button>
                     </div>
 
-                    {selectedServitor.powers && (
+                    <div className="space-y-4">
+                      {selectedServitor.call && (
+                        <div>
+                          <strong className="text-gray-700">Call:</strong>
+                          <p className="text-gray-600">
+                            {selectedServitor.call}
+                          </p>
+                        </div>
+                      )}
+
                       <div>
-                        <strong className="text-gray-700">Powers:</strong>
+                        <strong className="text-gray-700">Purpose:</strong>
                         <p className="text-gray-600">
-                          {selectedServitor.powers}
+                          {selectedServitor.purpose}
                         </p>
                       </div>
-                    )}
 
-                    <div>
-                      <strong className="text-gray-700">Timing:</strong>
-                      <p className="text-gray-600">{selectedServitor.timing}</p>
+                      {selectedServitor.powers && (
+                        <div>
+                          <strong className="text-gray-700">Powers:</strong>
+                          <p className="text-gray-600">
+                            {selectedServitor.powers}
+                          </p>
+                        </div>
+                      )}
+
+                      <div>
+                        <strong className="text-gray-700">Timing:</strong>
+                        <p className="text-gray-600">
+                          {selectedServitor.timing}
+                        </p>
+                      </div>
+
+                      {selectedServitor.zodiac_sign && (
+                        <div>
+                          <strong className="text-gray-700">
+                            Zodiac Sign:
+                          </strong>
+                          <p className="text-gray-600">
+                            {selectedServitor.zodiac_sign}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedServitor.appearance && (
+                        <div>
+                          <strong className="text-gray-700">Appearance:</strong>
+                          <p className="text-gray-600">
+                            {selectedServitor.appearance}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedServitor.sustenance && (
+                        <div>
+                          <strong className="text-gray-700">Sustenance:</strong>
+                          <p className="text-gray-600">
+                            {selectedServitor.sustenance}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedServitor.location && (
+                        <div>
+                          <strong className="text-gray-700">Location:</strong>
+                          <p className="text-gray-600">
+                            {selectedServitor.location}
+                          </p>
+                        </div>
+                      )}
+
+                      <div>
+                        <strong className="text-gray-700">Fatal Flaw:</strong>
+                        <p className="text-gray-600">
+                          {selectedServitor.fatal_flaw}
+                        </p>
+                      </div>
                     </div>
 
-                    {selectedServitor.zodiac_sign && (
-                      <div>
-                        <strong className="text-gray-700">Zodiac Sign:</strong>
-                        <p className="text-gray-600">
-                          {selectedServitor.zodiac_sign}
-                        </p>
-                      </div>
-                    )}
-
-                    {selectedServitor.appearance && (
-                      <div>
-                        <strong className="text-gray-700">Appearance:</strong>
-                        <p className="text-gray-600">
-                          {selectedServitor.appearance}
-                        </p>
-                      </div>
-                    )}
-
-                    {selectedServitor.sustenance && (
-                      <div>
-                        <strong className="text-gray-700">Sustenance:</strong>
-                        <p className="text-gray-600">
-                          {selectedServitor.sustenance}
-                        </p>
-                      </div>
-                    )}
-
-                    {selectedServitor.location && (
-                      <div>
-                        <strong className="text-gray-700">Location:</strong>
-                        <p className="text-gray-600">
-                          {selectedServitor.location}
-                        </p>
-                      </div>
-                    )}
-
-                    <div>
-                      <strong className="text-gray-700">Fatal Flaw:</strong>
-                      <p className="text-gray-600">
-                        {selectedServitor.fatal_flaw}
-                      </p>
+                    <div className="flex gap-4 mt-8">
+                      <button
+                        onClick={() => handleEdit(selectedServitor)}
+                        className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(selectedServitor.id)}
+                        className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 mt-8">
-                    <button
-                      onClick={() => handleEdit(selectedServitor)}
-                      className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(selectedServitor.id)}
-                      className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition"
-                    >
-                      Delete
-                    </button>
+                  {/* Right Column - Sigil */}
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                      Sigil
+                    </h3>
+
+                    {/* Hidden canvas for generation */}
+                    <SigilGenerator
+                      name={selectedServitor.name}
+                      onSigilGenerated={handleSigilGenerated}
+                    />
+
+                    {/* Display existing or generated sigil */}
+                    {selectedServitor.sigil_image || generatedSigil ? (
+                      <div className="space-y-4">
+                        <div className="bg-white border-2 border-gray-300 rounded-lg p-4">
+                          <img
+                            src={selectedServitor.sigil_image || generatedSigil}
+                            alt={`Sigil for ${selectedServitor.name}`}
+                            className="w-full h-auto"
+                          />
+                        </div>
+
+                        <div className="flex gap-2">
+                          {!selectedServitor.sigil_image && generatedSigil && (
+                            <button
+                              onClick={handleGenerateSigil}
+                              className="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition"
+                            >
+                              Save Sigil
+                            </button>
+                          )}
+                          <button
+                            onClick={() =>
+                              downloadSigil(
+                                selectedServitor.sigil_image || generatedSigil,
+                                selectedServitor.name
+                              )
+                            }
+                            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
+                          >
+                            Download Sigil
+                          </button>
+                        </div>
+
+                        {selectedServitor.sigil_image && (
+                          <button
+                            onClick={handleGenerateSigil}
+                            className="w-full bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition"
+                          >
+                            Regenerate Sigil
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-8 text-center">
+                        <p className="text-gray-600 mb-4">No sigil yet</p>
+                        <button
+                          onClick={handleGenerateSigil}
+                          className="bg-purple-600 text-white py-2 px-6 rounded-md hover:bg-purple-700 transition"
+                        >
+                          Generate Sigil
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </>
+                </div>
               ) : (
                 // Edit Mode
                 <>
@@ -276,6 +391,7 @@ export default function MyServitors() {
                       onClick={() => {
                         setIsEditing(false);
                         setSelectedServitor(null);
+                        setGeneratedSigil(null);
                       }}
                       className="text-gray-500 hover:text-gray-700 text-2xl"
                     >
@@ -295,7 +411,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, name: e.target.value })
                         }
-                        className="w-full px-4 py-2 text-gray-500 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -309,7 +425,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, call: e.target.value })
                         }
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -324,7 +440,7 @@ export default function MyServitors() {
                           setEditData({ ...editData, purpose: e.target.value })
                         }
                         rows="3"
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -338,7 +454,7 @@ export default function MyServitors() {
                           setEditData({ ...editData, powers: e.target.value })
                         }
                         rows="3"
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -352,7 +468,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, timing: e.target.value })
                         }
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
                         <option value="constant">Constant</option>
                         <option value="single-use">Single Use</option>
@@ -372,7 +488,7 @@ export default function MyServitors() {
                             zodiac_sign: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
                         <option value="">
                           Select a zodiac sign (optional)
@@ -386,7 +502,7 @@ export default function MyServitors() {
                     </div>
 
                     <div>
-                      <label className="block text-sm  font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Appearance
                       </label>
                       <textarea
@@ -398,7 +514,7 @@ export default function MyServitors() {
                           })
                         }
                         rows="3"
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -415,7 +531,7 @@ export default function MyServitors() {
                             sustenance: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -429,7 +545,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, location: e.target.value })
                         }
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -447,7 +563,7 @@ export default function MyServitors() {
                           })
                         }
                         rows="2"
-                        className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
