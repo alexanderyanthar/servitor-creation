@@ -411,7 +411,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, name: e.target.value })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -425,7 +425,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, call: e.target.value })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -440,7 +440,7 @@ export default function MyServitors() {
                           setEditData({ ...editData, purpose: e.target.value })
                         }
                         rows="3"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -454,7 +454,7 @@ export default function MyServitors() {
                           setEditData({ ...editData, powers: e.target.value })
                         }
                         rows="3"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -468,7 +468,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, timing: e.target.value })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
                         <option value="constant">Constant</option>
                         <option value="single-use">Single Use</option>
@@ -488,7 +488,7 @@ export default function MyServitors() {
                             zodiac_sign: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
                         <option value="">
                           Select a zodiac sign (optional)
@@ -514,7 +514,7 @@ export default function MyServitors() {
                           })
                         }
                         rows="3"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -531,7 +531,7 @@ export default function MyServitors() {
                             sustenance: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -545,7 +545,7 @@ export default function MyServitors() {
                         onChange={(e) =>
                           setEditData({ ...editData, location: e.target.value })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
@@ -563,7 +563,7 @@ export default function MyServitors() {
                           })
                         }
                         rows="2"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border text-gray-600 border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       />
                     </div>
 
