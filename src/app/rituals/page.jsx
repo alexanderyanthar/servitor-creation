@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
 import { useSearchParams } from "next/navigation";
 
-export default function RitualLogs() {
+function RitualLogsContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const servitorIdFromUrl = searchParams.get("servitor");
@@ -158,7 +158,7 @@ export default function RitualLogs() {
       servitor_id: servitorIdFromUrl || "",
       ritual_date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
-        .split("T")[0], // Same fix here
+        .split("T")[0],
       title: "",
       notes: "",
       experiences: "",
@@ -254,7 +254,13 @@ export default function RitualLogs() {
                   type="date"
                   required
                   value={formData.ritual_date}
-                  max={new Date().toISOString().split("T")[0]}
+                  max={
+                    new Date(
+                      Date.now() - new Date().getTimezoneOffset() * 60000
+                    )
+                      .toISOString()
+                      .split("T")[0]
+                  }
                   onChange={(e) =>
                     setFormData({ ...formData, ritual_date: e.target.value })
                   }
@@ -437,5 +443,19 @@ export default function RitualLogs() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function RitualLogs() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <p className="text-xl text-gray-600">Loading ritual logs...</p>
+        </div>
+      }
+    >
+      <RitualLogsContent />
+    </Suspense>
   );
 }
