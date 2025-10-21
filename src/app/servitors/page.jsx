@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import SigilGenerator from "@/components/SigilGenerator";
 
 const ZODIAC_SIGNS = [
@@ -22,6 +23,7 @@ const ZODIAC_SIGNS = [
 
 export default function MyServitors() {
   const { user } = useAuth();
+  const router = useRouter();
   const [servitors, setServitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedServitor, setSelectedServitor] = useState(null);
@@ -138,6 +140,10 @@ export default function MyServitors() {
     link.click();
   };
 
+  const handleViewRituals = (servitorId) => {
+    router.push(`/rituals?servitor=${servitorId}`);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -168,27 +174,46 @@ export default function MyServitors() {
             {servitors.map((servitor) => (
               <div
                 key={servitor.id}
-                onClick={() => setSelectedServitor(servitor)}
-                className="bg-white shadow-md rounded-lg p-6 cursor-pointer hover:shadow-xl transition"
+                className="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition"
               >
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  {servitor.name}
-                </h2>
-                <p className="text-sm text-gray-500 mb-3">
-                  Created: {new Date(servitor.created_at).toLocaleDateString()}
-                </p>
-                {servitor.zodiac_sign && (
-                  <p className="text-sm text-purple-600 mb-3">
-                    ♈ {servitor.zodiac_sign}
+                <div
+                  onClick={() => setSelectedServitor(servitor)}
+                  className="cursor-pointer"
+                >
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    {servitor.name}
+                  </h2>
+                  <p className="text-sm text-gray-500 mb-3">
+                    Created:{" "}
+                    {new Date(servitor.created_at).toLocaleDateString()}
                   </p>
-                )}
-                {servitor.sigil_image && (
-                  <p className="text-sm text-green-600 mb-3">✓ Sigil created</p>
-                )}
-                <p className="text-gray-700 line-clamp-3">{servitor.purpose}</p>
-                <p className="text-sm text-purple-600 mt-3 font-medium">
-                  {servitor.timing}
-                </p>
+                  {servitor.zodiac_sign && (
+                    <p className="text-sm text-purple-600 mb-3">
+                      ♈ {servitor.zodiac_sign}
+                    </p>
+                  )}
+                  {servitor.sigil_image && (
+                    <p className="text-sm text-green-600 mb-3">
+                      ✓ Sigil created
+                    </p>
+                  )}
+                  <p className="text-gray-700 line-clamp-3">
+                    {servitor.purpose}
+                  </p>
+                  <p className="text-sm text-purple-600 mt-3 font-medium">
+                    {servitor.timing}
+                  </p>
+                </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewRituals(servitor.id);
+                  }}
+                  className="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition text-sm"
+                >
+                  📖 View Ritual Logs
+                </button>
               </div>
             ))}
           </div>

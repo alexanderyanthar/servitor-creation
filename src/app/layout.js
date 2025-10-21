@@ -1,5 +1,5 @@
 // src/app/layout.js
-import Navigation from "@/components/navigation";
+import Navigation from "@/components/Navigation";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
